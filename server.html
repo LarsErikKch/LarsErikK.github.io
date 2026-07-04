@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Server-Konsole</title>
+
+<style>
+body {
+    font-family: Consolas, monospace;
+    background: #020617;
+    color: #e5e7eb;
+    padding: 40px;
+}
+
+.console {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    height: 500px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.1);
+    color: #e5e7eb;
+}
+</style>
+</head>
+<body>
+
+<h1>Server‑Konsole</h1>
+
+<div class="console" id="console"></div>
+
+<input id="cmd" placeholder="Befehl eingeben...">
+
+<script>
+if (localStorage.getItem("role") !== "admin") {
+    document.body.innerHTML = "<h1>Zugriff verweigert</h1>";
+}
+
+function print(t) {
+    const c = document.getElementById("console");
+    c.innerHTML += t + "<br>";
+    c.scrollTop = c.scrollHeight;
+}
+
+print("Konsole gestartet. (help für Befehle)");
+
+document.getElementById("cmd").addEventListener("keydown", e => {
+    if (e.key === "Enter") run();
+});
+
+function run() {
+    const cmd = document.getElementById("cmd").value.trim();
+    document.getElementById("cmd").value = "";
+    print("> " + cmd);
+
+    switch(cmd) {
+        case "help":
+            print("Befehle: help, status, restart, logs, clear, users, time, version");
+            break;
+        case "status":
+            print("Server: ONLINE | CPU: 12% | RAM: 32%");
+            break;
+        case "restart":
+            print("Server wird neu gestartet...");
+            setTimeout(() => print("Server neu gestartet!"), 1500);
+            break;
+        case "logs":
+            print("[12:01] Admin eingeloggt");
+            print("[12:05] Status abgefragt");
+            break;
+        case "users":
+            print("Admin, Support, System");
+            break;
+        case "time":
+            print(new Date().toLocaleString());
+            break;
+        case "version":
+            print("Version 1.4.2");
+            break;
+        case "clear":
+            document.getElementById("console").innerHTML = "";
+            break;
+        default:
+            print("Unbekannter Befehl");
+    }
+}
+</script>
+
+</body>
+</html>
